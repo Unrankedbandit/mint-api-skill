@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mint API"
+  short_description: "Build with the Mint asset API"
+  default_prompt: "Use $mint-api to integrate Mint asset generation into this project."
