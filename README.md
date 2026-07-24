@@ -1,5 +1,9 @@
 # Mint API Skill
 
+## Bring 3D creation into your app.
+
+![A sunlit workspace with a retro computer generated with Mint](assets/platform-mint-landing.webp)
+
 Give coding agents the service-specific Mint API workflow for generation,
 review, polling, retries, assets, derivatives, file delivery, rate limits, and Credits.
 

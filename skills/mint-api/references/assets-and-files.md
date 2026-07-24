@@ -19,4 +19,9 @@ Mint calls an individual downloadable file an artifact in route and field names.
 
 Manifests provide filenames, MIME types, sizes when known, and download URLs. Refresh a manifest if a URL expires or a derivative finishes later.
 
+World manifests use `integrationMode: "remote_stream"`. Load the RAD stream from
+`runtime.runtimeUrl` and the invisible collider from
+`runtime.collider.runtimeUrl`. The `artifacts` array contains the available
+Preview image; it intentionally does not duplicate the streamed runtime files.
+
 For model derivatives, preserve the original model and use returned derivative fields or related resources. For Asset Packs, inspect item status and preserve successful files during partial failure.
