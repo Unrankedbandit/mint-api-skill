@@ -4,7 +4,7 @@ Choose the service first. Keep generation, review, retry, derivatives, and retri
 
 ## 3D Models
 
-Use the Model routes for generation, Preview review/revision, retry, optimization, smart topology, and conversion. Optimization updates the model's optimized file and reuses active or completed same-level work. Smart topology creates a new derivative, so protect uncertain retries with a stable `Idempotency-Key`. Convert with `POST /v1/models/{modelId}:convert`; the body contains `targetFormats` and an optional `name`. Use the separate Animation routes for motion outputs.
+Use the Model routes for generation, Preview review/revision, retry, optimization, smart topology, and conversion. Optimization updates the model's optimized file. Repeating the same level while it is active returns `409 model-optimization-in-progress`; repeating a completed same-level optimization returns `409 model-already-optimized`. Neither conflict starts new work or charges again. Smart topology creates a new derivative, so protect uncertain retries with a stable `Idempotency-Key`. Convert with `POST /v1/models/{modelId}:convert`; the body contains `targetFormats` and an optional `name`. Use the separate Animation routes for motion outputs.
 
 For `POST /v1/models/{modelId}:animate`, send only animation selection and optional height. Use `scope` and `itemIds` only with `POST /v1/asset-packs/{assetPackId}:animate`.
 Each accepted animation request can create another output; use a stable retry key when an integration may repeat an uncertain request.

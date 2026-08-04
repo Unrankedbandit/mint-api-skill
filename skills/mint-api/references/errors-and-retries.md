@@ -18,6 +18,6 @@ Mint creates an internal request key for normal mutations, so ordinary requests 
 
 If the integration will retry a mutation after a lost connection or retryable `5xx`, generate one stable key before the first attempt and pass it as `Idempotency-Key` on every attempt. The same key and request return the existing operation; the same key with changed input returns a conflict. If the first attempt did not include a caller-supplied key and its outcome is unknown, do not retry automatically because another operation may start.
 
-Asset Pack approval reuses items that already started or finished, and same-level optimization does not create another optimized copy. Smart topology and animation are additive outputs: without a caller-supplied retry key, another accepted request can start another output.
+Asset Pack approval reuses items that already started or finished. Repeating the same optimization level returns `409 model-optimization-in-progress` while active or `409 model-already-optimized` after completion; neither response creates another copy or charge. Smart topology and animation are additive outputs: without a caller-supplied retry key, another accepted request can start another output.
 
 Bound retries by attempt count and elapsed time. Log `X-Request-Id`, operation IDs, resource IDs, HTTP status, and the stable problem `type`; never log the API key or provider credentials. Include the request ID when asking Mint support to investigate a failure.
