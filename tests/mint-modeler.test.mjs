@@ -148,3 +148,15 @@ test("downloads the GLB without sending the API key and summarizes Credits", asy
   assert.equal(summary.glbHeaderOk, true);
   assert.ok(!JSON.stringify(summary).includes("test-key"));
 });
+
+test("runs when the skill folder is reached through a symlink", { skip: process.platform === "win32" }, async () => {
+  const { spawnSync } = await import("node:child_process");
+  const { symlinkSync } = await import("node:fs");
+  const { fileURLToPath } = await import("node:url");
+  const scripts = fileURLToPath(new URL("../skills/mint-modeler/scripts", import.meta.url));
+  const link = join(mkdtempSync(join(tmpdir(), "mint-modeler-link-")), "scripts");
+  symlinkSync(scripts, link, "dir");
+  const run = spawnSync(process.execPath, [join(link, "mint-modeler.mjs"), "help"], { encoding: "utf8" });
+  assert.equal(run.status, 0);
+  assert.match(run.stdout, /Mint Modeler helper/);
+});

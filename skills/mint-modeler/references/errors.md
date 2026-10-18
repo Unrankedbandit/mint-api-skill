@@ -13,7 +13,7 @@ Mint returns problem JSON. The script prints `status`, `type` (the last part of 
 | `409` | `invalid-operation-stage` | The session already has an active request (wait or cancel it), or the operation is not a Modeler operation and cannot be canceled here. |
 | `409` | `idempotency-conflict` | The same `Idempotency-Key` was used with different input. Use a new key for a new request. |
 | `422` | `content-policy-blocked` | The description was blocked by Mint's content policy. Tell the user; do not reword it to get around the policy. |
-| `429` | | Rate limit. The script waits for `Retry-After` and retries. Mint allows 600 requests per minute and 30 paid starts per minute per account, shared across its keys. |
+| `429` | | Rate limit. The script waits for `Retry-After` and retries. Mint allows 600 requests per minute per account, including polling, shared across its keys. |
 | `503` | `content-safety-unavailable` | The content check is briefly unavailable. The script retries; if it keeps failing, try again in a few minutes. |
 | `503` | `generation-start-failed` | Modeler could not start. The script retries with the same `Idempotency-Key`, which reuses the original request instead of starting a second one. |
 

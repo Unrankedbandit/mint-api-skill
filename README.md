@@ -50,7 +50,7 @@ Then connect your key without pasting it into chat (create one at
 [platform.mint.gg](https://platform.mint.gg) under **API keys**):
 
 ```bash
-node ~/.claude/skills/mint-modeler/scripts/mint-modeler.mjs login   # use your agent's skills folder
+node ~/.agents/skills/mint-modeler/scripts/mint-modeler.mjs login   # the folder the installer printed
 ```
 
 Ask your agent:
