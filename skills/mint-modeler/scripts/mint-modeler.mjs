@@ -450,14 +450,26 @@ async function runModeling(args, parentModelId) {
 }
 
 async function finish(operationId, args) {
-  let op = await waitForOperation(operationId, {
-    timeoutMinutes: args["timeout-minutes"] ? Number(args["timeout-minutes"]) : undefined,
-    onStage: (stage) => progress(operationId + ": " + stage),
-  });
+  let op;
+  try {
+    op = await waitForOperation(operationId, {
+      timeoutMinutes: args["timeout-minutes"] ? Number(args["timeout-minutes"]) : undefined,
+      onStage: (stage) => progress(operationId + ": " + stage),
+    });
+  } catch (error) {
+    if (!error.operation) throw error;
+    print({
+      ...summarize(error.operation),
+      stillRunning: true,
+      next: "Run: wait " + operationId + " (or cancel " + operationId + ")",
+    });
+    process.exitCode = 3;
+    return;
+  }
   let files;
   if (op.status === "succeeded") {
     files = await downloadArtifacts(op, resolve(args.out ?? "mint-models"));
-    op = await waitForSettlement(op);
+    op = await waitForSettlement(op, { checks: 4 });
   }
   print(summarize(op, files));
   if (op.status !== "succeeded") process.exitCode = 2;

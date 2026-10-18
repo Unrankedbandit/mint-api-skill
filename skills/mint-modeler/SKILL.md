@@ -23,15 +23,21 @@ Run everything through `scripts/mint-modeler.mjs` in this skill folder. It calls
 
 1. Turn the user's words into one clear description: the object, its style, its materials and colors, and its real size (for example "about 10 cm tall"). Keep the user's own details; do not invent extra features.
 2. Pick the quality tier (see below). If the user did not say, recommend one and confirm before starting anything above Low, because it spends Credits.
-3. Start and wait:
+3. Start the request, then wait in short steps. Modeling takes minutes and agent shell commands usually time out sooner, so start with `--no-wait`:
 
    ```bash
-   node scripts/mint-modeler.mjs generate --prompt "A small low-poly coffee mug, about 9 cm tall, matte white glaze" --tier low --out ./mint-models
+   node scripts/mint-modeler.mjs generate --prompt "A small low-poly coffee mug, about 9 cm tall, matte white glaze" --tier low --no-wait
    ```
 
    Add `--image path/or/https-url` (up to 8) for reference images. Local images must be JPEG, PNG, GIF, or WebP, at most 5 MB and 5,000 x 5,000 pixels.
-4. The script prints progress to stderr and a JSON summary at the end: `operationId`, `status`, `modelId`, `files.glb`, `files.preview`, `creditsCharged`, and `creditsMax`. Report to the user: where the GLB and preview are saved, the operation ID, and the Credits charged. If `billing` is still `pending`, say the charge is not settled yet and will be at most `creditsMax`.
-5. A request queues first and then models for up to its tier's time. For long waits, use `--no-wait`, tell the user the operation ID, and later run `node scripts/mint-modeler.mjs wait <operationId> --out ./mint-models`. Check progress any time with `status <operationId>`.
+4. Tell the user the operation ID, then wait and download:
+
+   ```bash
+   node scripts/mint-modeler.mjs wait <operationId> --out ./mint-models --timeout-minutes 8
+   ```
+
+   If it stops because the time ran out, the request is still running: run the same `wait` command again. Repeat until it finishes. Use a shorter `--timeout-minutes` if your shell limit is below 8 minutes, and never start a second request for the same model while waiting. `status <operationId>` shows progress without waiting.
+5. The final JSON summary has `operationId`, `status`, `modelId`, `files.glb`, `files.preview`, `creditsCharged`, and `creditsMax`. Report to the user: where the GLB and preview are saved, the operation ID, the model ID, and the Credits charged. If `billing` is still `pending`, say the charge is not settled yet and will be at most `creditsMax`.
 
 ## Quality tiers
 
